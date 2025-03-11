@@ -2,7 +2,7 @@ name: 更新 Clash/CloudflareCIDR.list
 
 on:
   schedule:
-    - cron: '5 * */5 * *'
+    - cron: '0 0 1 * *'  # 每月1日的00:00运行一次
   workflow_dispatch:  # 允许手动触发
 
 jobs:
@@ -33,3 +33,7 @@ jobs:
         git commit -m "Downloaded file on $(date "+%Y/%m/%d %H:%M:%S")"
         git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{github.repository}}.git
         git push
+
+    - name: Always run
+      if: failure()
+      run: echo "This step runs even if previous steps failed."
